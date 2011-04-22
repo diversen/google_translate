@@ -69,16 +69,40 @@ function google_translate($options){
     cos_cli_print('Translation compleate!');
 }
 
+function google_translate_all ($options){
+    $ary = google_translate_get_langs($options);
+    if (empty($options['module'])){
+        cos_cli_abort("Specify a module");
+    }
+
+    foreach ($ary['data']['languages'] as $key => $val){
+        cos_cli_print("Translating into $val[name]");
+        $options['target'] = $val['language'];
+        google_translate($options);
+    }
+}
+
+
+/**
+ * function for getting an assoc array with all supported langs
+ * where target is en.
+ * @param array $options
+ */
 function google_translate_langs($options){
+    $ary = google_translate_get_langs($options);
+    print_r($ary);
+}
+
+function google_translate_get_langs($options){
     include_once "GTranslate.php";
 
     $g_options = array();
     $g_options['target'] = "en";
-    echo $g_options['key'] = mainCli::$ini['google_translate']['key'];
+    $g_options['key'] = mainCli::$ini['google_translate']['key'];
     gTranslate::setOptions($g_options);
     $ary = GTranslate::getSupportLangs();
-    print_r($ary);
-    
+    return $ary;
+
 }
 
 mainCli::setCommand('google_translate', array(
@@ -89,6 +113,13 @@ mainCli::setOption('google_translate', array(
     'long_name'   => '--translate',
     'short_name'   => '-t',
     'description' => 'Create a translation file from all strings that should be translated. Use short code for target and source language (source must exist in module/lang folder',
+    'action'      => 'StoreTrue'
+));
+
+mainCli::setOption('google_translate_all', array(
+    'long_name'   => '--all-translate',
+    'short_name'   => '-a',
+    'description' => 'Translate a module to all known google languages with english (en_GB) as source',
     'action'      => 'StoreTrue'
 ));
 
