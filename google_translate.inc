@@ -8,7 +8,7 @@
  * @param array $options
  */
 function google_translate($options){
-    include_once "GTranslate.php";
+    //include_once "GTranslate.php";
 
     $g_options = array();
     $g_options['key'] = mainCli::$ini['google_translate']['key'];
@@ -21,7 +21,7 @@ function google_translate($options){
     }
 
     $g_options['target'] = $options['target'];
-    gTranslate::setOptions($g_options);
+    gtranslate::setOptions($g_options);
 
     $module_dir = _COS_PATH . "/modules/$options[module]";
     if (!file_exists($module_dir)){
@@ -43,7 +43,7 @@ function google_translate($options){
     $str = "<?php\n\n";
     cos_cli_print("Please wait. Translating.");
     foreach ($_COS_LANG_MODULE as $key => $val) {
-        $trans = GTranslate::translateSingle($val);
+        $trans = gtranslate::translateSingle($val);
         if (!$trans) {
             cos_cli_print ("Notice: Could not translate $val");
         }
@@ -58,7 +58,7 @@ function google_translate($options){
 
     $str = "<?php\n\n";
     foreach ($_COS_LANG_MODULE as $key => $val) {
-        $trans = GTranslate::translateSingle($val);
+        $trans = gtranslate::translateSingle($val);
         if (!$trans) {
             cos_cli_print ("Notice: Could not translate $val");
         }
@@ -94,13 +94,13 @@ function google_translate_langs($options){
 }
 
 function google_translate_get_langs($options){
-    include_once "GTranslate.php";
+    //include_once "GTranslate.php";
 
     $g_options = array();
     $g_options['target'] = "en";
     $g_options['key'] = mainCli::$ini['google_translate']['key'];
-    gTranslate::setOptions($g_options);
-    $ary = GTranslate::getSupportLangs();
+    gtranslate::setOptions($g_options);
+    $ary = gtranslate::getSupportLangs();
     return $ary;
 
 }
