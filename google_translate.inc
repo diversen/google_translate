@@ -66,7 +66,7 @@ function google_translate($options){
         echo ".";
     }
     file_put_contents($target_dir . "/system.inc", $str);
-    cos_cli_print('Translation compleate!');
+    cos_cli_print('Translation complete!');
 }
 
 function google_translate_all ($options){
