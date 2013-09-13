@@ -24,13 +24,15 @@ function google_translate($options){
     gtranslate::setOptions($g_options);
 
     $module_dir = _COS_PATH . "/modules/$options[module]";
-    if (!file_exists($module_dir)){
-        cos_cli_abort('No such module dir: ' . $module_dir);
+    if (!file_exists($module_dir)) {
+        cos_cli_print_status('Error', 'r', 'No such module dir: ' . $module_dir);
+        return;
     }
 
     $source_dir = $module_dir . "/lang/$options[source]";
     if (!file_exists($source_dir)){
-        cos_cli_abort("Error: Source dir does not exists: $source_dir");
+        cos_cli_print_status('Error', 'r', "Source dir does not exists: $source_dir");
+        return;
     }
 
     $target_dir = $module_dir . "/lang/$options[target]";
@@ -38,6 +40,7 @@ function google_translate($options){
         mkdir($target_dir);
     }
 
+    cos_cli_print_status('OK', 'g', "Will translate $options[module]");
     include "$source_dir/language.inc";
     
     $str = "<?php\n\n";
@@ -45,10 +48,12 @@ function google_translate($options){
     foreach ($_COS_LANG_MODULE as $key => $val) {
         $trans = gtranslate::translateSingle($val);
         if (!$trans) {
-            cos_cli_print ("Notice: Could not translate $val");
+            cos_cli_print_status('NOTICE', 'y', "Notice: Could not translate $val");
+        } else {
+            echo "$val\n$trans\n---\n";
         }
         $str.= "\$_COS_LANG_MODULE['$key'] = '$trans';" . "\n";
-        echo ".";
+        sleep(1);
     }
 
     file_put_contents($target_dir . "/language.inc", $str);
@@ -60,13 +65,16 @@ function google_translate($options){
     foreach ($_COS_LANG_MODULE as $key => $val) {
         $trans = gtranslate::translateSingle($val);
         if (!$trans) {
-            cos_cli_print ("Notice: Could not translate $val");
+            cos_cli_print_status('NOTICE', 'y', "Notice: Could not translate $val");
+        }else {
+            echo "$val\n$trans\n---\n";
         }
         $str.= "\$_COS_LANG_MODULE['$key'] = '$trans';" . "\n";
-        echo ".";
+        sleep(1);
     }
+    
     file_put_contents($target_dir . "/system.inc", $str);
-    cos_cli_print('Translation complete!');
+    cos_cli_print_status('OK', 'y', "Translation complete of module $options[module]");
 }
 
 function google_translate_all ($options){
@@ -105,6 +113,17 @@ function google_translate_get_langs($options){
 
 }
 
+function google_translate_all_mods ($options) {
+    if (!isset($options['module']) && $options['module'] != 'all') {
+        cos_cli_abort("specify 'all' as module when translating all modules");
+    }
+    $mods = moduleloader::getAllModules();
+    foreach ($mods as $mod) {
+        $options['module'] = $mod['module_name'];
+        google_translate($options);
+    }
+}
+
 mainCli::setCommand('google_translate', array(
     'description' => 'Will create a translation file for specified language for a module using googles translate api',
 ));
@@ -113,6 +132,12 @@ mainCli::setOption('google_translate', array(
     'long_name'   => '--translate',
     'short_name'   => '-t',
     'description' => 'Create a translation file from all strings that should be translated. Use short code for target and source language (source must exist in module/lang folder',
+    'action'      => 'StoreTrue'
+));
+
+mainCli::setOption('google_translate_all_mods', array(
+    'long_name'   => '--all-mods',
+    'description' => 'Translate all modules into a language',
     'action'      => 'StoreTrue'
 ));
 
