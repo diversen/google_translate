@@ -18,6 +18,13 @@ function google_translate($options){
         $g_options['source'] = 'en';
     } else {
         $g_options['source'] = $options['source'];
+        $ary = explode('_', $options['source']);
+        
+        // da_DK e.g. we only need 'da' in google translate API
+        if (count($ary) == 2) {
+            $g_options['source'] = $ary[0];
+        }
+        //print_r($ary); die;
     }
 
     $g_options['target'] = $options['target'];
