@@ -51,6 +51,11 @@ function google_translate($options){
 
     unset($_COS_LANG_MODULE);
     include "$source_dir/system.inc";
+    
+    if (!isset($_COS_LANG_MODULE)) {
+        cos_cli_print_status('NOTICE', 'y', "Notice: No strings in system.inc");
+        return;
+    }
 
     $str = "<?php\n\n";
     foreach ($_COS_LANG_MODULE as $key => $val) {
@@ -140,6 +145,11 @@ function google_translate_update($options){
     
     unset($_COS_LANG_MODULE);
     include "$source_dir/system.inc";
+    
+    if (!isset($_COS_LANG_MODULE)) {
+        cos_cli_print_status('NOTICE', 'y', "Notice: No strings in system.inc");
+        return;
+    }
 
     $str = "<?php\n\n";
     foreach ($_COS_LANG_MODULE as $key => $val) {
