@@ -291,13 +291,13 @@ mainCli::setOption('google_translate_update', array(
 ));
 
 mainCli::setOption('google_translate_template', array(
-    'long_name'   => '--template',
+    'long_name'   => '--temp',
     'description' => 'Create a translation file from all strings that should be translated. Use short code for target and source language (source must exist in module/lang folder',
     'action'      => 'StoreTrue'
 ));
 
 mainCli::setOption('google_translate_template_update', array(
-    'long_name'   => '--template-update',
+    'long_name'   => '--temp-up',
     'description' => 'Updates a translation. Use short code for target and source language (source must exist in module/lang folder',
     'action'      => 'StoreTrue'
 ));
