@@ -122,6 +122,8 @@ function google_translate_update($options){
     if (file_exists($org_lang_file)) {    
         include_once $org_lang_file;
         $_COS_ORG_LANG = $_COS_LANG_MODULE;
+        //print_r($_COS_ORG_LANG); 
+        //die;
     }
 
     cos_cli_print_status('OK', 'g', "Will translate $options[module]");
@@ -171,10 +173,17 @@ function google_translate_update($options){
     foreach ($_COS_LANG_MODULE as $key => $val) {
         
         // check if is translated
+        /*
         if (isset($_COS_ORG_SYSTEM[$key])) {
             $str.= "\$_COS_LANG_MODULE['$key'] = '$val';" . "\n";
             continue;
-        } 
+        } */ 
+        
+        if (isset($_COS_ORG_SYSTEM[$key]) ) {
+            $org_val = $_COS_ORG_SYSTEM[$key];
+            $str.= "\$_COS_LANG_MODULE['$key'] = '$org_val';" . "\n";
+            continue;
+        }
         
         $trans = gtranslate::translateSingle($val);
         if (!$trans) {
