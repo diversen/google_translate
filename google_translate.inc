@@ -172,13 +172,6 @@ function google_translate_update($options){
     $str = "<?php\n\n";
     foreach ($_COS_LANG_MODULE as $key => $val) {
         
-        // check if is translated
-        /*
-        if (isset($_COS_ORG_SYSTEM[$key])) {
-            $str.= "\$_COS_LANG_MODULE['$key'] = '$val';" . "\n";
-            continue;
-        } */ 
-        
         if (isset($_COS_ORG_SYSTEM[$key]) ) {
             $org_val = $_COS_ORG_SYSTEM[$key];
             $str.= "\$_COS_LANG_MODULE['$key'] = '$org_val';" . "\n";
