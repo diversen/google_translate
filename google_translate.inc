@@ -119,11 +119,11 @@ function google_translate_update($options){
     
     $org_lang_file = $target_dir . "/language.inc";
     $_COS_ORG_LANG = array ();
-    if (file_exists($org_lang_file)) {    
-        include_once $org_lang_file;
+    if (file_exists($org_lang_file)) {  
+
+        include $org_lang_file;
         $_COS_ORG_LANG = $_COS_LANG_MODULE;
-        //print_r($_COS_ORG_LANG); 
-        //die;
+
     }
 
     cos_cli_print_status('OK', 'g', "Will translate $options[module]");
@@ -156,7 +156,7 @@ function google_translate_update($options){
     $org_system_file = $target_dir . "/system.inc";
     if (file_exists($org_system_file)) {
         $_COS_ORG_SYSTEM = array ();
-        include_once $org_system_file;
+        include $org_system_file;
         $_COS_ORG_SYSTEM = $_COS_LANG_MODULE;
     }
     
