@@ -264,13 +264,22 @@ function google_translate_get_langs($options){
 }
 
 function google_translate_all_mods ($options) {
+    
     if (!isset($options['module']) && $options['module'] != 'all') {
         cos_cli_abort("specify 'all' as module when translating all modules");
     }
+    
     $mods = moduleloader::getAllModules();
     foreach ($mods as $mod) {
         $options['module'] = $mod['module_name'];
         google_translate_update($options);
+    }
+    
+    $mods = layout::getAllTemplates();
+    foreach($mods as $mod) {
+        $options['module'] = $mod;
+        google_translate_template_update($options);
+
     }
 }
 
