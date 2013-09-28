@@ -222,8 +222,17 @@ function google_translate_set_options (&$options) {
             $g_options['source'] = $ary[0];
         }
     }
+    
+    // set target 
+    $ary = explode('_', $options['target']);
+        
+    // da_DK e.g. we only need 'da' in google translate API
+    if (count($ary) == 2) {
+        $g_options['target'] = $ary[0];
+    } else {
+        $g_options['target'] = $options['target'];
+    }
 
-    $g_options['target'] = $options['target'];
     return $g_options;
 }
 
