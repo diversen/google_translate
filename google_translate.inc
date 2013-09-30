@@ -47,7 +47,9 @@ function google_translate($options){
         } else {
             echo "$val\n$trans\n---\n";
         }
-        $str.= "\$_COS_LANG_MODULE['$key'] = '$trans';" . "\n";
+        $str.= translate_with_quote($key, $trans);
+        //$str.= translate_with_quote($key, html::specialDecode($trans));
+        //$str.= "\$_COS_LANG_MODULE['$key'] = '$trans';" . "\n";
         sleep(1);
     }
 
@@ -69,7 +71,8 @@ function google_translate($options){
         }else {
             echo "$val\n$trans\n---\n";
         }
-        $str.= "\$_COS_LANG_MODULE['$key'] = '$trans';" . "\n";
+        $str.= translate_with_quote($key, $trans);
+        //$str.= "\$_COS_LANG_MODULE['$key'] = '$trans';" . "\n";
         sleep(1);
     }
     
@@ -137,7 +140,8 @@ function google_translate_update($options){
         // skip if already translated
         if (isset($_COS_ORG_LANG[$key]) ) {
             $org_val = $_COS_ORG_LANG[$key];
-            $str.= "\$_COS_LANG_MODULE['$key'] = '$org_val';" . "\n";
+            $str.= translate_with_quote($key, $org_val);
+            //$str.= "\$_COS_LANG_MODULE['$key'] = '$org_val';" . "\n";
             continue;
         }
         
@@ -147,7 +151,9 @@ function google_translate_update($options){
         } else {
             echo "$val\n$trans\n---\n";
         }
-        $str.= "\$_COS_LANG_MODULE['$key'] = '$trans';" . "\n";
+        
+        $str.= translate_with_quote($key, html_entity_decode($trans, ENT_QUOTES));
+        //$str.= "\$_COS_LANG_MODULE['$key'] = '$trans';" . "\n";
         sleep(1);
     }
 
@@ -174,7 +180,9 @@ function google_translate_update($options){
         
         if (isset($_COS_ORG_SYSTEM[$key]) ) {
             $org_val = $_COS_ORG_SYSTEM[$key];
-            $str.= "\$_COS_LANG_MODULE['$key'] = '$org_val';" . "\n";
+            // 
+            $str.= translate_with_quote($key, $org_val);
+            //$str.= "\$_COS_LANG_MODULE['$key'] = '$org_val';" . "\n";
             continue;
         }
         
@@ -184,7 +192,8 @@ function google_translate_update($options){
         }else {
             echo "$val\n$trans\n---\n";
         }
-        $str.= "\$_COS_LANG_MODULE['$key'] = '$trans';" . "\n";
+        $str.= translate_with_quote($key, html_entity_decode($trans, ENT_QUOTES));
+        //$str.= "\$_COS_LANG_MODULE['$key'] = '$trans';" . "\n";
         sleep(1);
     }
     
