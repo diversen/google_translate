@@ -152,7 +152,7 @@ function google_translate_update($options){
             echo "$val\n$trans\n---\n";
         }
         
-        $str.= translate_with_quote($key, html_entity_decode($trans, ENT_QUOTES));
+        $str.= translate_with_quote($key, $trans);
         //$str.= "\$_COS_LANG_MODULE['$key'] = '$trans';" . "\n";
         sleep(1);
     }
