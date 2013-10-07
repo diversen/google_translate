@@ -297,8 +297,28 @@ function google_translate_all_mods ($options) {
     foreach($mods as $mod) {
         $options['module'] = $mod;
         google_translate_template_update($options);
-
     }
+}
+
+function google_translate_collect_all ($options) {
+    
+    // extract translation from source language
+    $options['language'] = $options['source'];
+    translate_all_update($options);
+    
+    // translate all modules and templates
+    $all_options = $options;
+    $all_options['module'] = 'all';
+    google_translate_all_mods($all_options);
+    
+    // collect all into one file for both source and target
+    $collect_options = $options;
+    $collect_options['language'] = $options['source'];
+    translate_collect($collect_options);
+    
+    $collect_options['language'] = $options['target'];
+    translate_collect($collect_options);
+    
 }
 
 mainCli::setCommand('google_translate', array(
@@ -348,6 +368,12 @@ mainCli::setOption('google_translate_langs', array(
     'long_name'   => '--langs',
     'short_name'  => '-l',
     'description' => 'Show all available google languages. The short code should be used as target',
+    'action'      => 'StoreTrue'
+));
+
+mainCli::setOption('google_translate_collect_all', array(
+    'long_name'   => '--collect-all',
+    'description' => 'Will first extract new strings from all module and templates (from source). Then translate (to target). Then a new language-all will be created ',
     'action'      => 'StoreTrue'
 ));
 
