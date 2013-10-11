@@ -125,13 +125,23 @@ function google_translate_update($options){
     if (file_exists($org_lang_file)) {  
 
         include $org_lang_file;
-        $_COS_ORG_LANG = $_COS_LANG_MODULE;
+        if (isset($_COS_LANG_MODULE)) {
+            $_COS_ORG_LANG = $_COS_LANG_MODULE;
+        } else {
+            $_COS_ORG_LANG = array ();
+        }
 
     }
 
     cos_cli_print_status('OK', 'g', "Will translate $options[module]");
     $_COS_LANG_MODULE = array ();
-    include "$source_dir/language.inc";
+    
+    if (file_exists("$source_dir/language.inc")) {
+        include "$source_dir/language.inc";
+    } else {
+        cos_cli_print_status("NOTICE", 'y', "Source file: $source_dir/language.inc does not exists");
+        return;
+    }
     
     $str = "<?php\n\n";
     cos_cli_print("Please wait. Translating.");
@@ -168,6 +178,12 @@ function google_translate_update($options){
     
     
     unset($_COS_LANG_MODULE);
+    if (file_exists("$source_dir/system.inc")) {
+        include "$source_dir/system.inc";
+    } else {
+        cos_cli_print_status("NOTICE", 'y', "Source file: $source_dir/system.inc does not exists");
+        return;
+    }
     include "$source_dir/system.inc";
     
     if (!isset($_COS_LANG_MODULE)) {
