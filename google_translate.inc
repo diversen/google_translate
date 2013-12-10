@@ -318,6 +318,15 @@ function google_translate_all_mods ($options) {
 
 function google_translate_collect_all ($options) {
     
+    if (empty($options['module']) || empty($options['target']) && empty($options['source'])) {
+        //cos_cli_abort('You need to specify template where language-all.inc will be placed and source and target');
+    }
+    
+    $templates = layout::getAllTemplates();
+    if (!in_array($options['module'], $templates)) {
+        cos_cli_abort("No such template: $options[module]");
+    }
+    
     // extract translation from source language
     $options['language'] = $options['source'];
     translate_all_update($options);
