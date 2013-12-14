@@ -1,5 +1,6 @@
 <?php
 
+use diversen\gtranslate;
 /**
  * function for translating system.inc and language.inc
  * to other languages with google translate api.
