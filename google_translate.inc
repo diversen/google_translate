@@ -35,7 +35,7 @@ function google_translate($options){
         mkdir($target_dir);
     }
 
-    cos_cli_print_status('OK', 'g', "Will translate $options[module]");
+    cos_cli_print_status('Notice', 'y', "Will translate $options[module]");
     $_COS_LANG_MODULE = array ();
     include "$source_dir/language.inc";
     
@@ -78,7 +78,7 @@ function google_translate($options){
     }
     
     file_put_contents($target_dir . "/system.inc", $str);
-    cos_cli_print_status('OK', 'y', "Translation complete of module $options[module]");
+    cos_cli_print_status('OK', 'g', "Translation complete of module $options[module]");
 }
 
 function google_translate_template($options) {
@@ -215,7 +215,7 @@ function google_translate_update($options){
     }
     
     file_put_contents($target_dir . "/system.inc", $str);
-    cos_cli_print_status('OK', 'y', "Translation complete of module $options[module]");
+    cos_cli_print_status('OK', 'g', "Translation complete of module $options[module]");
 }
 
 /**
