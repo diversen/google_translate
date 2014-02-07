@@ -1,1 +1,9 @@
+; api key
 google_translate_key = 'your api key'
+; translate to all these languages
+google_translate_lang[] = 'da_DK'
+google_translate_lang[] = 'de'
+google_translate_lang[] = 'fi'
+google_translate_lang[] = 'no'
+google_translate_lang[] = 'sv'
+google_translate_lang[] = 'zh'

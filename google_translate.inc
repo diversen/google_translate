@@ -298,8 +298,13 @@ function google_translate_get_langs($options){
 
 }
 
-function google_translate_all_mods ($options) {
-    
+/**
+ * updates all modules and templates for one language
+ * @param array $options
+ */
+function google_translate_all_up ($options) {
+    //print_r($options);
+    //return;
     if (!isset($options['module']) && $options['module'] != 'all') {
         cos_cli_abort("specify 'all' as module when translating all modules");
     }
@@ -315,6 +320,24 @@ function google_translate_all_mods ($options) {
         $options['module'] = $mod;
         google_translate_template_update($options);
     }
+}
+
+function google_translate_all_from_ini ($options) {
+    
+    if (!isset($options['module']) && $options['module'] != 'all') {
+        cos_cli_abort("specify 'all' as module when translating all modules");
+    }
+    
+    $langs = config::getModuleIni('google_translate_lang');
+    //print_r($langs); die;
+    foreach ($langs as $lang) {
+        cos_cli_print_status('Notice',  'g',"Translating all from 'en_GB' to '$lang'" );
+        $options['module'] = 'all';
+        $options['target'] = $lang;
+        $options['source'] = 'en_GB';
+        google_translate_all_up($options);
+    }
+    return;
 }
 
 function google_translate_collect_all ($options) {
@@ -377,9 +400,15 @@ mainCli::setOption('google_translate_template_update', array(
     'action'      => 'StoreTrue'
 ));
 
-mainCli::setOption('google_translate_all_mods', array(
+mainCli::setOption('google_translate_all_up', array(
     'long_name'   => '--all-up',
-    'description' => 'Translate all modules into a language',
+    'description' => 'Translate all modules / templates into a language',
+    'action'      => 'StoreTrue'
+));
+
+mainCli::setOption('google_translate_all_from_ini', array(
+    'long_name'   => '--all-up-ini',
+    'description' => 'Translate all modules / templates into multiple languages defined in google_translate.ini',
     'action'      => 'StoreTrue'
 ));
 
