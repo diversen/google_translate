@@ -370,76 +370,76 @@ function google_translate_collect_all ($options) {
     
 }
 
-mainCli::setCommand('google_translate', array(
+self::setCommand('google-translate', array(
     'description' => 'Will create a translation file for specified language for a module using googles translate api',
 ));
 
-mainCli::setOption('google_translate', array(
+self::setOption('google_translate', array(
     'long_name'   => '--translate',
     'short_name'   => '-t',
     'description' => 'Create a translation file from all strings that should be translated. Use short code for target and source language (source must exist in module/lang folder',
     'action'      => 'StoreTrue'
 ));
 
-mainCli::setOption('google_translate_update', array(
+self::setOption('google_translate_update', array(
     'long_name'   => '--update',
     'short_name'   => '-u',
     'description' => 'Updates a translation. Use short code for target and source language (source must exist in module/lang folder',
     'action'      => 'StoreTrue'
 ));
 
-mainCli::setOption('google_translate_template', array(
+self::setOption('google_translate_template', array(
     'long_name'   => '--temp',
     'description' => 'Create a translation file from all strings that should be translated. Use short code for target and source language (source must exist in module/lang folder',
     'action'      => 'StoreTrue'
 ));
 
-mainCli::setOption('google_translate_template_update', array(
+self::setOption('google_translate_template_update', array(
     'long_name'   => '--temp-up',
     'description' => 'Updates a translation. Use short code for target and source language (source must exist in module/lang folder',
     'action'      => 'StoreTrue'
 ));
 
-mainCli::setOption('google_translate_all_up', array(
+self::setOption('google_translate_all_up', array(
     'long_name'   => '--all-up',
     'description' => 'Translate all modules / templates into a language',
     'action'      => 'StoreTrue'
 ));
 
-mainCli::setOption('google_translate_all_from_ini', array(
+self::setOption('google_translate_all_from_ini', array(
     'long_name'   => '--all-up-ini',
     'description' => 'Translate all modules / templates into multiple languages defined in google_translate.ini',
     'action'      => 'StoreTrue'
 ));
 
-mainCli::setOption('google_translate_all', array(
+self::setOption('google_translate_all', array(
     'long_name'   => '--all-translate',
     'short_name'   => '-a',
     'description' => 'Translate a module to all known google languages with english (en_GB) as source',
     'action'      => 'StoreTrue'
 ));
 
-mainCli::setOption('google_translate_langs', array(
+self::setOption('google_translate_langs', array(
     'long_name'   => '--langs',
     'short_name'  => '-l',
     'description' => 'Show all available google languages. The short code should be used as target',
     'action'      => 'StoreTrue'
 ));
 
-mainCli::setOption('google_translate_collect_all', array(
+self::setOption('google_translate_collect_all', array(
     'long_name'   => '--collect-all',
     'description' => 'Will first extract new strings from all module and templates (from source). Then translate (to target). Then a new language-all will be created ',
     'action'      => 'StoreTrue'
 ));
 
-mainCli::setArgument('module',
+self::setArgument('module',
     array('description'=> 'Specicify the module for which you will make a translation',
           'optional' => true));
 
-mainCli::setArgument('target',
+self::setArgument('target',
     array('description'=> 'Specicify the target language which we will translate into',
           'optional' => true));
 
-mainCli::setArgument('source',
+self::setArgument('source',
     array('description'=> 'Specicify the source language which we will translate from. If not specified en_GB will be used',
           'optional' => true));
