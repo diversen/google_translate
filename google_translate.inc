@@ -371,7 +371,7 @@ function google_translate_collect_all ($options) {
 }
 
 self::setCommand('google-translate', array(
-    'description' => 'Will create a translation file for specified language for a module using googles translate api',
+    'description' => 'Translate using Googles Translate API',
 ));
 
 self::setOption('google_translate', array(
