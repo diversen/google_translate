@@ -234,7 +234,7 @@ function google_translate_template_update($options) {
  */
 function google_translate_set_options (&$options) {
     $g_options = array();
-    $g_options['key'] = config::getModuleIni('google_translate_key');
+    $g_options['key'] = conf::getModuleIni('google_translate_key');
 
     if (empty($options['source'])){
         $options['source'] = 'en_GB';
@@ -291,7 +291,7 @@ function google_translate_get_langs($options){
 
     $g_options = array();
     $g_options['target'] = "en";
-    $g_options['key'] = config::getModuleIni('google_translate_key');
+    $g_options['key'] = conf::getModuleIni('google_translate_key');
     gtranslate::setOptions($g_options);
     $ary = gtranslate::getSupportLangs();
     return $ary;
@@ -328,7 +328,7 @@ function google_translate_all_from_ini ($options) {
         cos_cli_abort("specify 'all' as module when translating all modules");
     }
     
-    $langs = config::getModuleIni('google_translate_lang');
+    $langs = conf::getModuleIni('google_translate_lang');
     //print_r($langs); die;
     foreach ($langs as $lang) {
         cos_cli_print_status('Notice',  'g',"Translating all from 'en_GB' to '$lang'" );
