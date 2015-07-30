@@ -13,9 +13,9 @@ function google_translate($options){
     gtranslate::setOptions($g_options);
 
     if (isset($options['template'])) {
-        $module_dir = _COS_HTDOCS . "/templates/$options[module]";
+        $module_dir = conf::pathHtdocs() . "/templates/$options[module]";
     } else {
-        $module_dir = _COS_PATH . "/modules/$options[module]";
+        $module_dir = conf::pathBase() . "/modules/$options[module]";
     }
     
     if (!file_exists($module_dir)) {
@@ -99,9 +99,9 @@ function google_translate_update($options){
     gtranslate::setOptions($g_options);
 
     if (isset($options['template'])) {
-        $module_dir = _COS_HTDOCS . "/templates/$options[module]";
+        $module_dir = conf::pathHtdocs() . "/templates/$options[module]";
     } else {
-        $module_dir = _COS_PATH . "/modules/$options[module]";
+        $module_dir = conf::pathBase() . "/modules/$options[module]";
     }
     
     if (!file_exists($module_dir)) {
