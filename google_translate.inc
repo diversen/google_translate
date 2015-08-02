@@ -1,6 +1,9 @@
 <?php
 
+use diversen\conf;
 use diversen\gtranslate;
+use diversen\layout;
+use diversen\moduleloader;
 /**
  * function for translating system.inc and language.inc
  * to other languages with google translate api.
