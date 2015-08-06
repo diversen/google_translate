@@ -15,10 +15,16 @@ function google_translate($options){
     $g_options = google_translate_set_options($options);
     gtranslate::setOptions($g_options);
 
-    if (isset($options['template'])) {
-        $module_dir = conf::pathHtdocs() . "/templates/$options[module]";
+    if (isset($options['vendor'])) {
+        $module_dir = conf::pathBase() . "/vendor/diversen/simple-php-classes/src";
+        $lang_dir = conf::pathBase() . "/vendor/diversen/simple-php-classes/src/lang/$options[language]";
+    }
+    elseif (isset($options['template'])) {
+        $module_dir = conf::pathHtdocs() . '/templates/' . $options['module'];
+        $lang_dir = conf::pathHtdocs() . "/templates/$options[module]/lang/$options[language]";
     } else {
-        $module_dir = conf::pathBase() . "/modules/$options[module]";
+        $module_dir = conf::pathModules() . "/$options[module]";
+        $lang_dir = conf::pathModules() . "/$options[module]/lang/$options[language]";
     }
     
     if (!file_exists($module_dir)) {
@@ -52,8 +58,6 @@ function google_translate($options){
             echo "$val\n$trans\n---\n";
         }
         $str.= translate_with_quote($key, $trans);
-        //$str.= translate_with_quote($key, html::specialDecode($trans));
-        //$str.= "\$_COS_LANG_MODULE['$key'] = '$trans';" . "\n";
         sleep(1);
     }
 
@@ -89,6 +93,12 @@ function google_translate_template($options) {
     google_translate($options);
 }
 
+function google_translate_vendor($options) {
+
+    $options['vendor'] = true;
+    google_translate($options);
+}
+
 
 /**
  * function for translating system.inc and language.inc
@@ -101,10 +111,12 @@ function google_translate_update($options){
     $g_options = google_translate_set_options($options);
     gtranslate::setOptions($g_options);
 
-    if (isset($options['template'])) {
-        $module_dir = conf::pathHtdocs() . "/templates/$options[module]";
+    if (isset($options['vendor'])) {
+        $module_dir = conf::pathBase() . "/vendor/diversen/simple-php-classes/src";
+    } elseif (isset($options['template'])) {
+        $module_dir = conf::pathHtdocs() . '/templates/' . $options['module'];
     } else {
-        $module_dir = conf::pathBase() . "/modules/$options[module]";
+        $module_dir = conf::pathModules() . "/$options[module]";
     }
     
     if (!file_exists($module_dir)) {
@@ -202,7 +214,6 @@ function google_translate_update($options){
             $org_val = $_COS_ORG_SYSTEM[$key];
             // 
             $str.= translate_with_quote($key, $org_val);
-            //$str.= "\$_COS_LANG_MODULE['$key'] = '$org_val';" . "\n";
             continue;
         }
         
@@ -213,7 +224,6 @@ function google_translate_update($options){
             echo "$val\n$trans\n---\n";
         }
         $str.= translate_with_quote($key, html_entity_decode($trans, ENT_QUOTES));
-        //$str.= "\$_COS_LANG_MODULE['$key'] = '$trans';" . "\n";
         sleep(1);
     }
     
@@ -227,6 +237,15 @@ function google_translate_update($options){
  */
 function google_translate_template_update($options) {
     $options['template'] = true;
+    google_translate_update($options);
+}
+
+/**
+ * update a template translation
+ * @param array $options options given from shell
+ */
+function google_translate_vendor_update($options) {
+    $options['vendor'] = true;
     google_translate_update($options);
 }
 
@@ -290,7 +309,6 @@ function google_translate_langs($options){
 }
 
 function google_translate_get_langs($options){
-    //include_once "GTranslate.php";
 
     $g_options = array();
     $g_options['target'] = "en";
@@ -306,8 +324,7 @@ function google_translate_get_langs($options){
  * @param array $options
  */
 function google_translate_all_up ($options) {
-    //print_r($options);
-    //return;
+
     if (!isset($options['module']) && $options['module'] != 'all') {
         cos_cli_abort("specify 'all' as module when translating all modules");
     }
@@ -332,7 +349,6 @@ function google_translate_all_from_ini ($options) {
     }
     
     $langs = conf::getModuleIni('google_translate_lang');
-    //print_r($langs); die;
     foreach ($langs as $lang) {
         cos_cli_print_status('Notice',  'g',"Translating all from 'en_GB' to '$lang'" );
         $options['module'] = 'all';
@@ -343,11 +359,20 @@ function google_translate_all_from_ini ($options) {
     return;
 }
 
-function google_translate_collect_all ($options) {
+function google_translate_vendor_from_ini ($options) {
     
-    if (empty($options['module']) || empty($options['target']) && empty($options['source'])) {
-        //cos_cli_abort('You need to specify template where language-all.inc will be placed and source and target');
+    $langs = conf::getModuleIni('google_translate_lang');
+    foreach ($langs as $lang) {
+        cos_cli_print_status('Notice',  'g',"Translating vendor from 'en_GB' to '$lang'" );
+        $options['module'] = 'all';
+        $options['target'] = $lang;
+        $options['source'] = 'en_GB';
+        google_translate_vendor_update($options);
     }
+    return;
+}
+
+function google_translate_collect_all ($options) {
     
     $templates = layout::getAllTemplates();
     if (!in_array($options['module'], $templates)) {
@@ -403,6 +428,18 @@ self::setOption('google_translate_template_update', array(
     'action'      => 'StoreTrue'
 ));
 
+self::setOption('google_translate_vendor', array(
+    'long_name'   => '--vendor',
+    'description' => 'Create a translation file from all strings that should be translated. Use short code for target and source language (source must exist in module/lang folder',
+    'action'      => 'StoreTrue'
+));
+
+self::setOption('google_translate_vendor_update', array(
+    'long_name'   => '--vendor-up',
+    'description' => 'Updates a translation. Use short code for target and source language (source must exist in module/lang folder',
+    'action'      => 'StoreTrue'
+));
+
 self::setOption('google_translate_all_up', array(
     'long_name'   => '--all-up',
     'description' => 'Translate all modules / templates into a language',
@@ -412,6 +449,12 @@ self::setOption('google_translate_all_up', array(
 self::setOption('google_translate_all_from_ini', array(
     'long_name'   => '--all-up-ini',
     'description' => 'Translate all modules / templates into multiple languages defined in google_translate.ini',
+    'action'      => 'StoreTrue'
+));
+
+self::setOption('google_translate_vendor_from_ini', array(
+    'long_name'   => '--vendor-up-ini',
+    'description' => 'Translate vendor into multiple languages defined in google_translate.ini',
     'action'      => 'StoreTrue'
 ));
 
