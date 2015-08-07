@@ -4,6 +4,7 @@ use diversen\conf;
 use diversen\gtranslate;
 use diversen\layout;
 use diversen\moduleloader;
+use diversen\translate\extract;
 /**
  * function for translating system.inc and language.inc
  * to other languages with google translate api.
@@ -57,7 +58,7 @@ function google_translate($options){
         } else {
             echo "$val\n$trans\n---\n";
         }
-        $str.= translate_with_quote($key, $trans);
+        $str.= extract::setCorrectQuotes($key, $trans);
         sleep(1);
     }
 
@@ -79,7 +80,7 @@ function google_translate($options){
         }else {
             echo "$val\n$trans\n---\n";
         }
-        $str.= translate_with_quote($key, $trans);
+        $str.= extract::setCorrectQuotes($key, $trans);
         //$str.= "\$_COS_LANG_MODULE['$key'] = '$trans';" . "\n";
         sleep(1);
     }
@@ -166,7 +167,7 @@ function google_translate_update($options){
         // skip if already translated
         if (isset($_COS_ORG_LANG[$key]) ) {
             $org_val = $_COS_ORG_LANG[$key];
-            $str.= translate_with_quote($key, $org_val);
+            $str.= extract::setCorrectQuotes($key, $org_val);
             //$str.= "\$_COS_LANG_MODULE['$key'] = '$org_val';" . "\n";
             continue;
         }
@@ -178,7 +179,7 @@ function google_translate_update($options){
             echo "$val\n$trans\n---\n";
         }
         
-        $str.= translate_with_quote($key, $trans);
+        $str.= extract::setCorrectQuotes($key, $trans);
         //$str.= "\$_COS_LANG_MODULE['$key'] = '$trans';" . "\n";
         sleep(1);
     }
@@ -213,7 +214,7 @@ function google_translate_update($options){
         if (isset($_COS_ORG_SYSTEM[$key]) ) {
             $org_val = $_COS_ORG_SYSTEM[$key];
             // 
-            $str.= translate_with_quote($key, $org_val);
+            $str.= extract::setCorrectQuotes($key, $org_val);
             continue;
         }
         
@@ -223,7 +224,7 @@ function google_translate_update($options){
         }else {
             echo "$val\n$trans\n---\n";
         }
-        $str.= translate_with_quote($key, html_entity_decode($trans, ENT_QUOTES));
+        $str.= extract::setCorrectQuotes($key, html_entity_decode($trans, ENT_QUOTES));
         sleep(1);
     }
     
