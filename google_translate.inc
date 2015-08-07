@@ -46,12 +46,12 @@ function google_translate($options){
     }
 
     cos_cli_print_status('Notice', 'y', "Will translate $options[module]");
-    $_COS_LANG_MODULE = array ();
+    $LANG = array ();
     include "$source_dir/language.inc";
     
     $str = "<?php\n\n";
     cos_cli_print("Please wait. Translating.");
-    foreach ($_COS_LANG_MODULE as $key => $val) {
+    foreach ($LANG as $key => $val) {
         $trans = gtranslate::translateSingle($val);
         if (!$trans) {
             cos_cli_print_status('NOTICE', 'y', "Notice: Could not translate $val");
@@ -64,16 +64,16 @@ function google_translate($options){
 
     file_put_contents($target_dir . "/language.inc", $str);
 
-    unset($_COS_LANG_MODULE);
+    unset($LANG);
     include "$source_dir/system.inc";
     
-    if (!isset($_COS_LANG_MODULE)) {
+    if (!isset($LANG)) {
         cos_cli_print_status('NOTICE', 'y', "Notice: No strings in system.inc");
         return;
     }
 
     $str = "<?php\n\n";
-    foreach ($_COS_LANG_MODULE as $key => $val) {
+    foreach ($LANG as $key => $val) {
         $trans = gtranslate::translateSingle($val);
         if (!$trans) {
             cos_cli_print_status('NOTICE', 'y', "Notice: Could not translate $val");
@@ -81,7 +81,7 @@ function google_translate($options){
             echo "$val\n$trans\n---\n";
         }
         $str.= extract::setCorrectQuotes($key, $trans);
-        //$str.= "\$_COS_LANG_MODULE['$key'] = '$trans';" . "\n";
+        //$str.= "\$LANG['$key'] = '$trans';" . "\n";
         sleep(1);
     }
     
@@ -142,8 +142,8 @@ function google_translate_update($options){
     if (file_exists($org_lang_file)) {  
 
         include $org_lang_file;
-        if (isset($_COS_LANG_MODULE)) {
-            $_COS_ORG_LANG = $_COS_LANG_MODULE;
+        if (isset($LANG)) {
+            $_COS_ORG_LANG = $LANG;
         } else {
             $_COS_ORG_LANG = array ();
         }
@@ -151,7 +151,7 @@ function google_translate_update($options){
     }
 
     cos_cli_print_status('OK', 'g', "Will translate $options[module]");
-    $_COS_LANG_MODULE = array ();
+    $LANG = array ();
     
     if (file_exists("$source_dir/language.inc")) {
         include "$source_dir/language.inc";
@@ -162,13 +162,13 @@ function google_translate_update($options){
     
     $str = "<?php\n\n";
     cos_cli_print("Please wait. Translating.");
-    foreach ($_COS_LANG_MODULE as $key => $val) {
+    foreach ($LANG as $key => $val) {
         
         // skip if already translated
         if (isset($_COS_ORG_LANG[$key]) ) {
             $org_val = $_COS_ORG_LANG[$key];
             $str.= extract::setCorrectQuotes($key, $org_val);
-            //$str.= "\$_COS_LANG_MODULE['$key'] = '$org_val';" . "\n";
+            //$str.= "\$LANG['$key'] = '$org_val';" . "\n";
             continue;
         }
         
@@ -180,7 +180,7 @@ function google_translate_update($options){
         }
         
         $str.= extract::setCorrectQuotes($key, $trans);
-        //$str.= "\$_COS_LANG_MODULE['$key'] = '$trans';" . "\n";
+        //$str.= "\$LANG['$key'] = '$trans';" . "\n";
         sleep(1);
     }
 
@@ -190,11 +190,11 @@ function google_translate_update($options){
     if (file_exists($org_system_file)) {
         $_COS_ORG_SYSTEM = array ();
         include $org_system_file;
-        $_COS_ORG_SYSTEM = $_COS_LANG_MODULE;
+        $_COS_ORG_SYSTEM = $LANG;
     }
     
     
-    unset($_COS_LANG_MODULE);
+    unset($LANG);
     if (file_exists("$source_dir/system.inc")) {
         include "$source_dir/system.inc";
     } else {
@@ -203,13 +203,13 @@ function google_translate_update($options){
     }
     include "$source_dir/system.inc";
     
-    if (!isset($_COS_LANG_MODULE)) {
+    if (!isset($LANG)) {
         cos_cli_print_status('NOTICE', 'y', "Notice: No strings in system.inc");
         return;
     }
 
     $str = "<?php\n\n";
-    foreach ($_COS_LANG_MODULE as $key => $val) {
+    foreach ($LANG as $key => $val) {
         
         if (isset($_COS_ORG_SYSTEM[$key]) ) {
             $org_val = $_COS_ORG_SYSTEM[$key];
